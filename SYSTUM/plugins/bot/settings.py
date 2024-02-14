@@ -101,7 +101,7 @@ async def gib_repo_callback(_, callback_query):
         ),
     )
 
-back_button = InlineKeyboardButton(" ʙᴀᴄᴋ ", callback_data="Settingsback_helper")
+back_button = InlineKeyboardButton("ʙᴀᴄᴋ", callback_data="Settingsback_helper")
 
 
 @app.on_callback_query(
