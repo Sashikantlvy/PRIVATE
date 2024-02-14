@@ -104,7 +104,6 @@ async def gib_repo_callback(_, callback_query):
 close_button = InlineKeyboardButton(" ʙᴀᴄᴋ ", callback_data="Settingsback_helper")
 
 
-
 @app.on_callback_query(
     filters.regex(
         pattern=r"^(SEARCHANSWER|PLAYMODEANSWER|PLAYTYPEANSWER|AUTHANSWER|ANSWERVOMODE|VOTEANSWER|PM|AU|VM)$"
