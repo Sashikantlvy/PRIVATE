@@ -2,18 +2,19 @@ import random
 import string
 
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message
+from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message, InlineKeyboardButton
 from pytgcalls.exceptions import NoActiveGroupCall
 
 import config
-from SYSTUM  import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
-from SYSTUM .core.call import KING
-from SYSTUM .utils import seconds_to_min, time_to_seconds
-from SYSTUM .utils.channelplay import get_channeplayCB
-from SYSTUM .utils.decorators.language import languageCB
-from SYSTUM .utils.decorators.play import PlayWrapper
-from SYSTUM .utils.formatters import formats
-from SYSTUM .utils.inline import (
+from SYSTUM.utils.database import is_served_user
+from SYSTUM import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
+from SYSTUM.core.call import Anony
+from SYSTUM.utils import seconds_to_min, time_to_seconds
+from SYSTUM.utils.channelplay import get_channeplayCB
+from SYSTUM.utils.decorators.language import languageCB
+from SYSTUM.utils.decorators.play import PlayWrapper
+from SYSTUM.utils.formatters import formats
+from SYSTUM.utils.inline import (
     botplaylist_markup,
     livestream_markup,
     playlist_markup,
@@ -26,18 +27,8 @@ from config import BANNED_USERS, lyrical
 
 
 @app.on_message(
-    filters.command(
-        [
-            "play",
-            "vplay",
-            "cplay",
-            "cvplay",
-            "playforce",
-            "vplayforce",
-            "cplayforce",
-            "cvplayforce",
-        ]
-    )
+   filters.command(["play", "vplay", "cplay", "cvplay", "playforce", "vplayforce", "cplayforce", "cvplayforce"] ,prefixes=["/", "!", "%", ",", "", ".", "@", "#"])
+            
     & filters.group
     & ~BANNED_USERS
 )
@@ -53,6 +44,21 @@ async def play_commnd(
     url,
     fplay,
 ):
+    if not await is_served_user(message.from_user.id):
+        await message.reply_text(
+            text="ᴇʀʀᴏʀ, ʏᴏᴜ'ʀᴇ ɴᴏᴛ ᴀ ᴠᴇʀɪғɪᴇᴅ ᴜsᴇʀ.\nᴘʟᴇᴀsᴇ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴠᴇʀɪғʏ ʏᴏᴜʀsᴇʟғ.",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴠᴇʀɪғʏ",
+                            url=f"https://t.me/{app.username}?start=verify",
+                        )
+                    ]
+                ]
+            ),
+        )
+        return
     mystic = await message.reply_text(
         _["play_2"].format(channel) if channel else _["play_1"]
     )
@@ -224,7 +230,7 @@ async def play_commnd(
                 streamtype = "playlist"
                 plist_type = "spartist"
                 img = config.SPOTIFY_ARTIST_IMG_URL
-                cap = _["play_12"].format(message.from_user.first_name)
+                cap = _["play_11"].format(message.from_user.first_name)
             else:
                 return await mystic.edit_text(_["play_15"])
         elif await Apple.valid(url):
@@ -288,7 +294,7 @@ async def play_commnd(
             return await mystic.delete()
         else:
             try:
-                await KING.stream_call(url)
+                await DAXX.stream_call(url)
             except NoActiveGroupCall:
                 await mystic.edit_text(_["black_9"])
                 return await app.send_message(
@@ -501,8 +507,8 @@ async def play_music(client, CallbackQuery, _):
     return await mystic.delete()
 
 
-@app.on_callback_query(filters.regex("AnonymousAdmin") & ~BANNED_USERS)
-async def anonymous_check(client, CallbackQuery):
+@app.on_callback_query(filters.regex("DAXXmousAdmin") & ~BANNED_USERS)
+async def DAXXmous_check(client, CallbackQuery):
     try:
         await CallbackQuery.answer(
             "» ʀᴇᴠᴇʀᴛ ʙᴀᴄᴋ ᴛᴏ ᴜsᴇʀ ᴀᴄᴄᴏᴜɴᴛ :\n\nᴏᴘᴇɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ sᴇᴛᴛɪɴɢs.\n-> ᴀᴅᴍɪɴɪsᴛʀᴀᴛᴏʀs\n-> ᴄʟɪᴄᴋ ᴏɴ ʏᴏᴜʀ ɴᴀᴍᴇ\n-> ᴜɴᴄʜᴇᴄᴋ ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ ᴘᴇʀᴍɪssɪᴏɴs.",
@@ -512,7 +518,7 @@ async def anonymous_check(client, CallbackQuery):
         pass
 
 
-@app.on_callback_query(filters.regex("AnonyPlaylists") & ~BANNED_USERS)
+@app.on_callback_query(filters.regex("DAXXPlaylists") & ~BANNED_USERS)
 @languageCB
 async def play_playlists_command(client, CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
@@ -660,4 +666,4 @@ async def slider_queries(client, CallbackQuery, _):
         )
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
-        )
+            )
