@@ -8,7 +8,7 @@ from pytgcalls.exceptions import NoActiveGroupCall
 import config
 from SYSTUM.utils.database import is_served_user
 from SYSTUM import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
-from SYSTUM.core.call import Anony
+from SYSTUM.core.call import KING
 from SYSTUM.utils import seconds_to_min, time_to_seconds
 from SYSTUM.utils.channelplay import get_channeplayCB
 from SYSTUM.utils.decorators.language import languageCB
